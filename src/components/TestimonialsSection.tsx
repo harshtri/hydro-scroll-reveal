@@ -1,6 +1,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const testimonials = [
   {
@@ -40,31 +41,50 @@ export default function TestimonialsSection() {
     };
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
+  const nextTestimonial = () => {
+    setActiveIndex((prev) => (prev + 1) % testimonials.length);
+  };
 
-    return () => clearInterval(interval);
-  }, []);
+  const prevTestimonial = () => {
+    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
 
   return (
     <section className="scroll-section" id="testimonials">
-      <div className="content-block mr-auto ml-16 fade-in" ref={leftContentRef}>
+      <div className="content-block mr-auto ml-10 fade-in" ref={leftContentRef}>
         <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
           Formulated for <span className="text-hydrogen glowing-text">biohackers</span>, athletes, and high-performance minds.
         </h2>
       </div>
       
-      <div className="content-block ml-auto mr-16 fade-in" ref={rightContentRef}>
-        <div className="relative h-48">
+      <div className="content-block ml-auto mr-10 fade-in" ref={rightContentRef}>
+        <div className="flex items-center justify-between mb-4">
+          <button 
+            onClick={prevTestimonial}
+            className="p-2 rounded-full bg-dark-light hover:bg-hydrogen/20 transition-colors"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="h-5 w-5 text-hydrogen" />
+          </button>
+          <span className="text-gray-400 text-sm">{activeIndex + 1} / {testimonials.length}</span>
+          <button 
+            onClick={nextTestimonial}
+            className="p-2 rounded-full bg-dark-light hover:bg-hydrogen/20 transition-colors"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight className="h-5 w-5 text-hydrogen" />
+          </button>
+        </div>
+        
+        <div className="relative min-h-[200px]">
           {testimonials.map((testimonial, i) => (
             <div 
               key={testimonial.id}
               className={cn(
                 "absolute top-0 left-0 w-full transition-all duration-700",
-                i === activeIndex ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                i === activeIndex ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"
               )}
+              style={{ display: i === activeIndex ? "block" : "none" }}
             >
               <div className="bg-dark-light p-6 rounded-lg border border-hydrogen/20">
                 <p className="text-lg text-gray-200 mb-4">"{testimonial.quote}"</p>
@@ -79,20 +99,6 @@ export default function TestimonialsSection() {
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-        
-        <div className="flex mt-4 gap-2">
-          {testimonials.map((testimonial, i) => (
-            <button 
-              key={`dot-${testimonial.id}`}
-              className={cn(
-                "w-3 h-3 rounded-full transition-all duration-300",
-                i === activeIndex ? "bg-hydrogen w-6" : "bg-gray-600"
-              )}
-              onClick={() => setActiveIndex(i)}
-              aria-label={`View testimonial ${i + 1}`}
-            />
           ))}
         </div>
       </div>

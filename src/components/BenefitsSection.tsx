@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const benefits = [
   {
@@ -44,48 +45,54 @@ export default function BenefitsSection() {
     };
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % benefits.length);
-    }, 5000);
+  const nextBenefit = () => {
+    setActiveIndex((prev) => (prev + 1) % benefits.length);
+  };
 
-    return () => clearInterval(interval);
-  }, []);
+  const prevBenefit = () => {
+    setActiveIndex((prev) => (prev - 1 + benefits.length) % benefits.length);
+  };
 
   return (
     <section className="scroll-section" id="benefits" ref={sectionRef}>
-      <div className="content-block mr-auto ml-16 fade-in" ref={leftContentRef}>
+      <div className="content-block mr-auto ml-10 fade-in" ref={leftContentRef}>
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
           The Most Powerful Molecule You're <span className="text-hydrogen glowing-text">Not Using Yet</span>
         </h2>
       </div>
 
-      <div className="content-block ml-auto mr-16 fade-in" ref={rightContentRef}>
-        {benefits.map((benefit, i) => (
-          <div 
-            key={benefit.id}
-            className={cn(
-              "transition-all duration-500 opacity-0 absolute",
-              i === activeIndex ? "opacity-100 translate-y-0" : "translate-y-8"
-            )}
-            style={{ display: i === activeIndex ? "block" : "none" }}
+      <div className="content-block ml-auto mr-10 fade-in relative" ref={rightContentRef}>
+        <div className="flex items-center justify-between mb-4">
+          <button 
+            onClick={prevBenefit}
+            className="p-2 rounded-full bg-dark-light hover:bg-hydrogen/20 transition-colors"
+            aria-label="Previous benefit"
           >
-            <h3 className="text-2xl text-hydrogen font-semibold mb-3">{benefit.title}</h3>
-            <p className="text-gray-300">{benefit.description}</p>
-          </div>
-        ))}
-
-        <div className="flex mt-8 gap-2">
+            <ChevronLeft className="h-5 w-5 text-hydrogen" />
+          </button>
+          <span className="text-gray-400 text-sm">{activeIndex + 1} / {benefits.length}</span>
+          <button 
+            onClick={nextBenefit}
+            className="p-2 rounded-full bg-dark-light hover:bg-hydrogen/20 transition-colors"
+            aria-label="Next benefit"
+          >
+            <ChevronRight className="h-5 w-5 text-hydrogen" />
+          </button>
+        </div>
+        
+        <div className="min-h-[180px]">
           {benefits.map((benefit, i) => (
-            <button 
-              key={`dot-${benefit.id}`}
+            <div 
+              key={benefit.id}
               className={cn(
-                "w-3 h-3 rounded-full transition-all duration-300",
-                i === activeIndex ? "bg-hydrogen w-6" : "bg-gray-600"
+                "transition-all duration-500",
+                i === activeIndex ? "opacity-100 translate-y-0" : "opacity-0 absolute pointer-events-none"
               )}
-              onClick={() => setActiveIndex(i)}
-              aria-label={`View ${benefit.title}`}
-            />
+              style={{ display: i === activeIndex ? "block" : "none" }}
+            >
+              <h3 className="text-2xl text-hydrogen font-semibold mb-3">{benefit.title}</h3>
+              <p className="text-gray-300">{benefit.description}</p>
+            </div>
           ))}
         </div>
       </div>

@@ -25,14 +25,14 @@ export default function HeroSection() {
 
   return (
     <section className="scroll-section" id="hero">
-      <div className="content-block mr-auto ml-16 fade-in" ref={leftContentRef}>
+      <div className="content-block mr-auto ml-10 fade-in" ref={leftContentRef}>
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
           Upgrade Your <span className="text-hydrogen glowing-text">Cells</span>. 
           <br />Optimize <span className="text-hydrogen glowing-text">Recovery</span>.
         </h1>
       </div>
       
-      <div className="content-block ml-auto mr-16 fade-in" ref={rightContentRef}>
+      <div className="content-block ml-auto mr-10 fade-in" ref={rightContentRef}>
         <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
           Hydrogen-rich water for peak performance & longevity.
         </p>
